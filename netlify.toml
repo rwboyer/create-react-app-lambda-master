@@ -1,0 +1,5 @@
+[build]
+  Command = "yarn build && yarn build:lambda"
+  Functions = "lambda"
+  Publish = "build"
+  environment = { SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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" }
