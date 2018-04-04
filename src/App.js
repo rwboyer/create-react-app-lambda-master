@@ -6,25 +6,37 @@ class SlackMessage extends Component {
     super(props);
     this.state = { loading: false, text: null, error: null, success: false };
   }
+  generateHeaders() {
+    const headers = { "Content-Type": "application/json" };
+    if (netlifyIdentity.currentUser()) {
+      return netlifyIdentity.currentUser().jwt().then((token) => {
+        return { ...headers, Authorization: `Bearer ${token}` };
+      })
+    }
+    return Promise.resolve(headers);
+  }  
   handleText = (e) => {
     this.setState({ text: e.target.value });
   };
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({ loading: true });
-    fetch('/.netlify/functions/slack', {
-      method: "POST",
-      body: JSON.stringify({
-        text: this.state.text
+    this.generateHeaders().then((headers) => {
+      fetch('/.netlify/functions/slack', {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          text: this.state.text
+        })
       })
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.text().then(err => { throw (err) });
-        }
+        .then(response => {
+          if (!response.ok) {
+            return response.text().then(err => { throw (err) });
+          }
+        })
+        .then(() => this.setState({ loading: false, text: null, success: true, error: null }))
+        .catch(err => this.setState({ loading: false, success: false, error: err.toString() }))
       })
-      .then(() => this.setState({ loading: false, text: null, success: true, error: null }))
-      .catch(err => this.setState({ loading: false, success: false, error: err.toString() }))
   }
   render() {
     const { loading, text, error, success } = this.state;
