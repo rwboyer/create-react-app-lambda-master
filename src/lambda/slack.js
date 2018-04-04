@@ -11,6 +11,7 @@ export function handler(event, context, callback) {
   }  
   try {
     const payload = JSON.parse(event.body);
+    console.log("JWT claims:" + claims);
     fetch(slackURL, {
       method: "POST",
       body: JSON.stringify({ text: payload.text,
