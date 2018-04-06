@@ -13,6 +13,7 @@ export function handler(event, context, callback) {
   try {
     const payload = JSON.parse(event.body);
     console.log("JWT claims:" + util.inspect(claims, { showHidden: false, depth: null }));
+    console.log("JWT roles:" + util.inspect(claims.roles, {showHidden: false, depth: null}));
     fetch(slackURL, {
       method: "POST",
       body: JSON.stringify({ text: payload.text,
