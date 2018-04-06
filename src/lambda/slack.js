@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const util = require("util");
 const slackURL = process.env.SLACK_WEBHOOK_URL;
 console.log("URL = " + slackURL);
 export function handler(event, context, callback) {
@@ -11,7 +12,7 @@ export function handler(event, context, callback) {
   }  
   try {
     const payload = JSON.parse(event.body);
-    console.log("JWT claims:" + claims);
+    console.log("JWT claims:" + util.inspect(claims, { showHidden: false, depth: null }));
     fetch(slackURL, {
       method: "POST",
       body: JSON.stringify({ text: payload.text,

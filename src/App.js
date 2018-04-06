@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import netlifyIdentity from 'netlify-identity-widget';
+import Thermometer from 'react-thermometer-component'
 class SlackMessage extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +41,7 @@ class SlackMessage extends Component {
   }
   render() {
     const { loading, text, error, success } = this.state;
-    return <form onSubmit={this.handleSubmit}>
+    return <div> <form onSubmit={this.handleSubmit}>
       {error && <p><strong>Error sending message: {error}</strong></p>}
       {success && <p><strong>Done! Message sent to Slack</strong></p>}
       <p>
@@ -51,7 +52,9 @@ class SlackMessage extends Component {
       <p>
         <button type="submit" disabled={loading}>{loading ? "Sending Slack Message..." : "Send a Slack Message"}</button>
       </p>
-    </form>;
+    </form>
+    <Thermometer theme="light" value="18" max="100" format="$" size="large" height="300"/>
+    </div>;
   }
 }
 class App extends Component {
