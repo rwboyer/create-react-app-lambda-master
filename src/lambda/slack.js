@@ -17,7 +17,8 @@ export function handler(event, context, callback) {
       method: "POST",
       body: JSON.stringify({ text: payload.text,
         attachments: [
-          { "text": `From ${claims.email}` }
+          { "text": `From ${claims.email}` },
+          { "text": `Roles ${claims.roles}`}
         ] })
     }).then(() => {
       callback(null, { statusCode: 204 });
